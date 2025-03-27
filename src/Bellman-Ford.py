@@ -8,7 +8,7 @@ INF = 100000005
 
 #Variables
 start = 1;
-l = defaultdict(list)#l = [[] for _ in range(NMAX)]
+l = defaultdict(list) #l = [[] for _ in range(NMAX)]
 dmin = [INF] * NMAX
 neg = [0] * NMAX
 heap = []
@@ -23,25 +23,31 @@ def Read(fin):
         x, y, cost = map(int, fin.readline().split())
         l[x].append((y, cost))
 
+def BellmanFord():
+    global negativ, start, l, heap
+    dmin[start] = 0
+    heapq.heappush(heap, (0, start))
+    while len(heap) > 0 and not negativ:
+        aux = heapq.heappop(heap)
+        vfmin = aux[1];
+        minim = aux[0]
+
+        for vfnou in l[vfmin]:
+            vf = vfnou[0];
+            cost = vfnou[1]
+            if dmin[vf] > minim + cost:
+                dmin[vf] = minim + cost
+                heapq.heappush(heap, (dmin[vf], vf))
+                neg[vf] += 1
+                if neg[vf] > n:
+                    negativ = True
+                    break
+
 #Main
 with open('input.in', 'r') as fin:
     Read(fin)
 
-dmin[start] = 0
-heapq.heappush(heap, (0, start))
-while len(heap) > 0 and not negativ:
-    aux = heapq.heappop(heap)
-    vfmin = aux[1]; minim = aux[0]
-
-    for vfnou in l[vfmin]:
-         vf = vfnou[0]; cost = vfnou[1]
-         if dmin[vf] > minim+cost:
-             dmin[vf] = minim+cost
-             heapq.heappush(heap, (dmin[vf], vf))
-             neg[vf] += 1
-             if neg[vf] > n:
-                 negativ = True
-                 break
+BellmanFord()
 
 with open('output.out', 'w') as fout:
     if negativ:
