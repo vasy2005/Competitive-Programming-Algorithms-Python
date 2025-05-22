@@ -1,5 +1,6 @@
 #pbinfo Prim
 
+
 INF = 10000005
 
 with open('../.venv/prim.in', 'r') as file:
